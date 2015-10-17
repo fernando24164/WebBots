@@ -2,6 +2,7 @@
 import re
 import urllib2
 
+
 def openWebsite(link):
 	response = urllib2.urlopen(link)
 	html = response.read()
@@ -12,14 +13,16 @@ def openWebsite(link):
 		latitude = latitude_finder.search(html)
 		longitude = longitude_finder.search(html)
 		if latitude and longitude:
-			print(latitude.group(0).decode("utf-8"))
-			print(longitude.group(0).decode("utf-8"))
+			print(link.split('/')[4]+": "+latitude.group(0).decode("utf-8")+" "+longitude.group(0).decode("utf-8"))
 		else:
-			print("Latitude or longitude not found on the web")
-			exit(0)
+			print("Latitude or longitude of "+link.split('/')[4]+" not found on the web")
+			# exit(0)
+
 
 def main():
-	openWebsite('https://en.wikipedia.org/wiki/Paris')
+	with open('cities.txt', 'r') as f:
+		for line in f:
+			openWebsite('https://en.wikipedia.org/wiki/'+line)
 
 if __name__ == '__main__':
 	main()
